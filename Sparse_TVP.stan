@@ -1,5 +1,5 @@
 data {
-int<lower=1> N;                         // Total obs
+  int<lower=1> N;                         // Total obs
   int<lower=1> T;                       // Years
   int<lower=1> P;                       // number of variables
   array[N] int<lower=1, upper=T> tt;    // time index (1..T) for each obs
@@ -12,12 +12,13 @@ int<lower=1> N;                         // Total obs
 
 parameters {
   // Horseshoe prior for beta 1
+  real alpha;
   vector[P] beta1;
   vector<lower=0>[P] lambda;
   real<lower=0> tau;
 
   // Horseshoe prior for variances theta: diag(Q)
-  vector<lower=0>[P] theta;
+  vector<lower=0>[P] sigma_theta;        // sd
   vector<lower=0>[P] kappa;
   real<lower=0> xi;
 
@@ -27,11 +28,10 @@ parameters {
 
 transformed parameters {
   matrix[T, P] beta;                    // time-varying coefficients
-
   beta[1] = beta1';
   for (t in 2:T) {
     for (p in 1:P) {
-      beta[t, p] = beta[t-1, p] + sqrt(theta[p]) * z[t-1, p];
+      beta[t, p] = beta[t-1, p] + sigma_theta[p] * z[t-1, p];
     }
   }
 }
@@ -47,13 +47,15 @@ model {
   // Horseshoe for theta
   kappa  ~ cauchy(0, 1);
   xi     ~ cauchy(0, xi0);
-  theta  ~ normal(0, xi .* kappa);   // truncated by lower=0 constraint
+  sigma_theta  ~ normal(0, xi .* kappa);   // truncated by lower=0 constraint
 
   // Non-centered State shocks
   to_vector(z) ~ normal(0, 1);
 
   // -------------- Likelihood (logit) ------------------
+  alpha ~ normal(0,2);
+  
   for (n in 1:N) {
-    y[n] ~ bernoulli_logit(dot_product(X[n], beta[tt[n]]'));
+    y[n] ~ bernoulli_logit(alpha + X[n] * beta[tt[n]]');
   }
 }
