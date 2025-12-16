@@ -19,22 +19,21 @@ df <- read_csv("df_normalized.csv", show_col_types = FALSE) %>% as.data.frame()
 ewi_num <- names(df)[sapply(df, is.numeric)]
 ewi_col  <- setdiff(ewi_num, c("year", "crisis"))
 
-# Bayesian model
+# MCMC modeling
 tau0 <- 0.8
 xi0  <- 1
 
 chains <- 4
-iter   <- 2000
-warmup <- 1000
+iter   <- 4000
+warmup <- 2000
 seed   <- 123
-control_list <- list(adapt_delta = 0.99, max_treedepth = 15)
+control_list <- list(adapt_delta = 0.95, max_treedepth = 12)
 
 
 # Keep needed columns, drop missing
 d <- df[, c('year', 'crisis', ewi_col), drop = FALSE]
 # Delete NA if exists
 d <- d[complete.cases(d), , drop = FALSE]
-
 
 # ----------------------------
 # Build full-sample time index tt and X
@@ -60,7 +59,7 @@ stan_data_all <- list(
 )
 
 # ----------------------------
-# Fit on ALL data
+# Fit on ALL data (in-sample)
 # ----------------------------
 fit_all <- stan(
   file = "Sparse_TVP.stan",
@@ -72,14 +71,19 @@ fit_all <- stan(
   control = control_list
 )
 
-# Show Result
-View(beta_df)
+beta_draws <- rstan::extract(fit_all, pars = "beta")$beta
 
-# 95% CI of Beta
-beta_mid_lo <- apply(beta_draws, c(2,3), quantile, probs = 0.025)
-beta_mid_hi <- apply(beta_draws, c(2,3), quantile, probs = 0.975)
+# Beta results
+beta_med <- apply(beta_draws, c(2,3), median)
+beta_low <- apply(beta_draws, c(2,3), quantile, probs = 0.025)
+beta_high <- apply(beta_draws, c(2,3), quantile, probs = 0.975)
 
-beta_df$mid_lo <- as.vector(beta_mid_lo)
-beta_df$mid_hi <- as.vector(beta_mid_hi)
-
+beta_df <- data.frame(
+                  t_idx    = rep(1:T_all, times=P),
+                  year     = rep(all_years,times=P),
+                  variable = rep(ewi_col, each = T_all),
+                  med      = as.vector(beta_med),
+                  low      = as.vector(beta_low),
+                  high    = as.vector(beta_high)
+)
 
