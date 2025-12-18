@@ -8,7 +8,7 @@ recession <- data.frame(xmin = c(1914, 1933, 1939),
                         xmax = c(1918, 1939, 1945))
 
 # Draw All variables
-ggplot(beta_df, aes(x = year, y = med)) +
+all_variables<- ggplot(beta_df, aes(x = year, y = med)) +
   # 95% credible interval
   geom_ribbon(aes(ymin = low, ymax = high), fill = "blue",alpha = 0.25) +
   geom_rect(data = recession,inherit.aes = FALSE, 
@@ -27,7 +27,9 @@ ggplot(beta_df, aes(x = year, y = med)) +
     strip.background = element_rect(fill = "beige"),
     panel.grid.minor = element_blank()
   )
-  
+
+all_variables
+
 # ----------------------------
 # Select Time varying EWIs and Stavle EWIs 
 # See beta, theta, and credible interval (should mostly not cover 0)
@@ -43,7 +45,7 @@ ewi_stable_df <- subset(beta_df, variable %in% ewi_stable)
 # Time-varying EWIs
 # ----------------------------
 
-ggplot(ewi_vary_df, aes(x = year, y = med)) +
+EWI_Vary <-ggplot(ewi_vary_df, aes(x = year, y = med)) +
   # 95% credible interval
   geom_ribbon(aes(ymin = low, ymax = high), fill = "blue",alpha = 0.25) +
   geom_rect(data = recession,inherit.aes = FALSE, 
@@ -63,11 +65,12 @@ ggplot(ewi_vary_df, aes(x = year, y = med)) +
     panel.grid.minor = element_blank()
   )
 
+EWI_Vary
 
 # ----------------------------
 # Stable EWIs
 # ----------------------------
-ggplot(ewi_stable_df, aes(x = year, y = med)) +
+Stable_EWI <-ggplot(ewi_stable_df, aes(x = year, y = med)) +
   # 95% credible interval
   geom_ribbon(aes(ymin = low, ymax = high), fill = "red",alpha = 0.25) +
   geom_rect(data = recession,inherit.aes = FALSE, 
@@ -86,3 +89,5 @@ ggplot(ewi_stable_df, aes(x = year, y = med)) +
     strip.background = element_rect(fill = "beige"),
     panel.grid.minor = element_blank()
   )
+
+Stable_EWI
