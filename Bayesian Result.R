@@ -75,8 +75,8 @@ beta_draws <- rstan::extract(fit_all, pars = "beta")$beta
 
 # Beta results
 beta_med <- apply(beta_draws, c(2,3), median)
-beta_low <- apply(beta_draws, c(2,3), quantile, probs = 0.025)
-beta_high <- apply(beta_draws, c(2,3), quantile, probs = 0.975)
+beta_low <- apply(beta_draws, c(2,3), quantile, probs = 0.05)
+beta_high <- apply(beta_draws, c(2,3), quantile, probs = 0.95)
 
 beta_df <- data.frame(
                   t_idx    = rep(1:T_all, times=P),
