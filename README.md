@@ -54,7 +54,7 @@ We consider a time-varying parameter model defined as follows:
 $$
 \beta_t = \beta_{t-1} + \omega_t \tag{1}
 $$
-
+<br/>
 $$
 q_t = x_t \beta_t \tag{2}
 $$
@@ -79,5 +79,33 @@ The objective is to categorize the numerous explanatory variables into three typ
 In other words, the goal is to distinguish between $\beta_j$ and $\theta_j$ values that are close to zero and those that are not. To find this, the study uses Bayesian inference framework using **Shrinkage Prior**.
 
 ### Shrinkage Prior
-It is desirable to employ a shrinkage prior that exhibits the property of shrinking the estimates of state variables to zero when the they are in close proximity to zero, while returning the estimated value without shrinkage when it is significantly distant from zero.
+It is desirable to employ a shrinkage prior that exhibits the property of shrinking the estimates of state variables to zero when the they are in close proximity to zero, while returning the estimated value without shrinkage when it is significantly distant from zero. The study uses the **horseshoe prior**, which is computationally advantageous and typically used in this context, to perform baseline estimation. For $j$ = 1, ... , $p$, the model assumes the following prior distributions for parameters.
+
+$$
+\beta_{j,1} \mid \lambda_j, \tau \sim N\left(0, \tau^2 \lambda_j^2 \right) \tag{3}
+$$
+<br/>
+$$
+\lambda_j \sim C^+(0, 1) \tag{4}
+$$
+<br/>
+$$
+\tau \sim C^+(0, \tau_0) \tag{5}
+$$
+
+$$
+\theta_j \mid \kappa_j, \xi \sim N\left(0, \xi^2 \kappa_j^2 \right) \tag{6}
+$$
+<br/>
+$$
+\kappa_j \sim C^+(0, 1) \tag{7}
+$$
+<br/>
+$$
+\xi \sim C^+(0, \xi_0) \tag{8}
+$$
+
+$\tau_0$ and $\xi_0$ are the hyper-parameters which reflect the prior assumptions about the degree of shrinkage of $\tau$ and $\xi$, respectively. Since there is no strong consensus on their calibration, they are commonly set to 1 in empirical applications. Here, the hyper parameters are set to be 0.8 and 1, respectively, following Piironen and Vehtari(2017) The model is estimated with MCMC sampling.
+
+## Results
 
