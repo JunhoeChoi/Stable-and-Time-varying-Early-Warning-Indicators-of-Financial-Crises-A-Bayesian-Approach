@@ -7,7 +7,7 @@ library(ggplot2)
 recession <- data.frame(xmin = c(1914, 1933, 1939),
                         xmax = c(1918, 1939, 1945))
 
-ggplot(beta_df, aes(x = year, y = variable, fill = med)) +
+Estimated_Coef <- ggplot(beta_df, aes(x = year, y = variable, fill = med)) +
   geom_tile() +
   scale_fill_gradient2(
     name = "coefs",
@@ -27,4 +27,4 @@ ggplot(beta_df, aes(x = year, y = variable, fill = med)) +
     legend.position = "right"
   )
 
-
+Estimated_Coef
