@@ -47,3 +47,23 @@ These exclusions ensure that the model focuses on economically meaningful transi
 - All explanatory variables are normalized to have a mean of zero and a standard deviation of one.
 - Variables transformed into growth rates are winsorized at the 5th percentile in both upper and lower tails to mitigate the influence of outliers.
 
+## Model Specification
+
+We consider a time-varying parameter model defined as follows:
+
+$$
+\beta_t = \beta_{t-1} + \omega_t \tag{1}
+$$
+
+$$
+q_t = x_t \beta_t \tag{2}
+$$
+
+where the state innovation term satisfies
+
+$$
+\omega_t \sim \mathcal{N}_p(0, Q).
+$$
+
+Here, $\beta_t$ is a $p$-dimensional vector of time-varying coefficients, $x_t$ denotes the corresponding regressor vector, and $Q$ is the covariance matrix governing the evolution of the state process.
+
