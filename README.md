@@ -65,7 +65,7 @@ $$
 \omega_t \sim \mathcal{N}_p(0, Q).
 $$
 
-Here, $\beta_t$ is a $p$-dimensional vector of time-varying coefficients, $x_t$ denotes the corresponding explanatory variables at time $t$, and $Q$ is the ($p$, $p$)covariance matrix governing the evolution of the state process with a $p$-dimensional vector **$\theta$** = { $\theta_1$,..., $\theta_p$} as its diagonal elements.
+Here, $q_t$ denotes the vector of logit-transformed probabilities of financial crises at time $t$, and $x_t$ denotes the corresponding explanatory variables at time $t$. $\beta_t$ is a $p$-dimensional vector of time-varying coefficients and $Q$ is the ($p$, $p$)covariance matrix governing the evolution of the state process with a $p$-dimensional vector **$\theta$** = { $\theta_1$,..., $\theta_p$} as its diagonal elements.
 
 ### Properties of $\beta$ and $\theta$ values
 The objective is to categorize the numerous explanatory variables into three types: 1) stable EWI, 2) time-varying EWI, and 3) irrelevant variables for prediction.
