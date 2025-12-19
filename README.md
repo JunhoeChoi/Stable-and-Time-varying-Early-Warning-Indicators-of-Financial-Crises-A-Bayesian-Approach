@@ -16,8 +16,9 @@ Systemic financial crises are defined following Schularick and Taylor (2012) as 
 - The baseline crisis indicator equals 1 in the year marking the onset of a systemic financial crisis in a given country.
 - To enable early warning prediction, the dependent variable is set to 1 for one and two years prior to the crisis onset, capturing the pre-crisis phase.
 - The crisis year itself and the four subsequent years are excluded from the analysis to avoid post-crisis bias, following Bussière and Fratzscher (2006). These periods are characterized by recovery dynamics and adjustment processes that do not reflect transitions from healthy to crisis regimes.
-Sample Exclusions
-#### To ensure consistency and avoid structural distortions, the following observations are excluded:
+
+#### Sample Exclusions
+To ensure consistency and avoid structural distortions, the following observations are excluded:
 - Post-crisis recovery years (crisis year + four years)
 - 1933–1939, corresponding to the later phase of the Great Depression
 - World War I (1914–1918) and World War II (1939–1945)
@@ -65,7 +66,7 @@ $$
 \omega_t \sim \mathcal{N}_p(0, Q).
 $$
 
-Here, $q_t$ denotes the vector of logit-transformed probabilities of financial crises at time $t$, and $x_t$ denotes the corresponding explanatory variables at time $t$. $\beta_t$ is a $p$-dimensional vector of time-varying coefficients and $Q$ is a diagonal $p \times p$  covariance matrix governing the evolution of the state process, defined as $Q$ = diag(**$\theta$**); **$\theta$** = { $\theta_1$,..., $\theta_p$}.
+Here, $q_t$ denotes the vector of logit-transformed probabilities of financial crises at time $t$, and $x_t$ denotes the corresponding explanatory variables at time $t$. $\beta_t$ is a $p$-dimensional vector of time-varying coefficients and $Q$ is a diagonal $p \times p$  covariance matrix governing the evolution of the state process, defined as $Q$ = diag(**$\theta$**); **$\theta$** = ( $\theta_1$,..., $\theta_p$).
 
 ### Properties of $\beta$ and $\theta$ values
 The objective is to categorize the numerous explanatory variables into three types: 1) stable EWI, 2) time-varying EWI, and 3) irrelevant variables for prediction.
