@@ -48,7 +48,7 @@ These exclusions ensure that the model focuses on economically meaningful transi
 - All explanatory variables are normalized to have a mean of zero and a standard deviation of one.
 - Variables transformed into growth rates are winsorized at the 5th percentile in both upper and lower tails to mitigate the influence of outliers.
 
-## Model Specification
+## Model Specification (Sparse TVP Model)
 
 We consider a time-varying parameter model defined as follows:
 
@@ -125,6 +125,86 @@ Coefficients of all variables are as follows.
 **Coefficients of Stable EWIs**
 <img src="Stable_EWI.png">
 
-## Results for Forecasting Evaluations
-(See details in [Forecast in Machine Learnings](Forecasting_ML.ipynb))
+## Forecasting Financial Crisis
 
+Previously, I have identified a set of EWIs among various macroeconomic variables. The analysis reveals that these EWIs consist of those that have been consistently useful over a long period, as well as those that have become effective recently: mainly since the 1980s. Stable EWIs identified include credit-to-GDP ratio and the non- core funding ratio of banks, which is in line with numerous previous studies that have attempted to identify EWIs. Variables that have gained increasing importance in recent years include the global credit-to-GDP ratio, which suggests that there is a growing need to consider global factors, not just domestic ones, in predicting and understanding financial crises.
+
+I have confirmed that Sparse TVP model surpasses alternative models, such as logistic regression and LASSO regression, in terms of out-of-sample prediction accuracy. Our results suggest that taking into account the time variation of EWIs can enhance our understanding of past crises and, at the same time, offer valuable insights into future financial crisis predictions.
+
+This section exhibits performance evaluations for out-of-sample prediction of various machine learning models including Recurrent Neural Networks. Later on the paper, we will compare the results with Sparse TVP model. (See details in [Forecast in Machine Learnings](Forecasting_ML.ipynb))
+
+## Model Specification in forecasting models (RNNs)
+
+### Short Definition of Recurrent neural networks
+
+Here, I am conducting Recurrent neural networks and the gated RNNs (LSTM and GRU). Recurrent neural networks (RNNs) are a class of neural networks specially designed to process sequential data, such as time series and language. RNNs utilize their hidden states as a form of memory to dynamically process a sequence of explanatory variables over time. One of the most important features of RNNs is their ability to maintain the temporal order of the input sequence, which is particularly useful in situations where temporal ordering is critical to avoid overfitting. Given their ability to retain memory and preserve temporal ordering, RNNs may represent an ideal tool for predicting systemic financial crises. By analyzing the time series, RNNs can detect the accumulation of vulnerabilities and retain the accumulated level of vulnerability. In the presence of a critical incident, such as a domestic economic slowdown or an international shock, RNNs can generate signals, which can facilitate timely interventions to prevent potential crisis scenarios.
+
+In this paper, for machine learning models, we consider three different RNN models: basic RNN, RNN with Long-Short Term Memory (LSTM), and RNN with GRU. Basic RNNs, while having a relatively low number of parameters, can be vulnerable to instabilities such as the vanishing or exploding gradient problem. To address these issues, LSTMs and GRUs implement gating mechanisms, which have proven effective at improving the stability of the models. Consequently, these architectures are commonly referred to as gated RNNs. Gated RNNs are particularly proficient at retaining information about past events in a time series. When dealing with panel data, which often involves longitudinal or repeated observations, LSTMs and GRUs may be more appropriate choices due to their capacity to capture long-term dependencies in the data.
+
+Table below presents an overview of the prediction models used in the study.
+
+|   Model  |                          Hyperparameters                          |
+| :------: | :---------------------------------------------------------------: |
+|    RNN   | Time window = 5 · Hidden layer dimension = 10 · L2 weight = 0.001 |
+| RNN-LSTM | Time window = 5 · Hidden layer dimension = 10 · L2 weight = 0.001 |
+|  RNN-GRU | Time window = 5 · Hidden layer dimension = 10 · L2 weight = 0.001 |
+
+### Performance Evaluation
+
+#### ROC curve (AUC)
+
+For the prediction exercises, we partition the entire dataset into an earlier part as a training sample and a latter part as a testing sample, based on a specific year. This kind of partitioning in chronological order is necessary because our dataset exhibits temporal ordering, and we seek to avoid employing future values in the current prediction task. To ensure robustness, we compare multiple cutoff years, such as 1980 and 1990, as reference points. Results in Sparse-TVP model also support our data split periods. In short, the predictive powers in global credit to GDP had been grown since 1980s, thereby supporting the plausibility of splitting time periods around this era.
+
+The evaluation of predictive accuracy follows standard practice, using the area under the **ROC curve (AUC)** to maintain coherence and comparability with prior researches. Higher AUC values correspond to better predictions, with a maximum value of one for a perfect model that can perfectly differentiate between the two states, crises, and normal periods. An AUC of 0.5 indicates a random guess, while an AUC below 0.5 implies that the predictions are less accurate than random guessing.
+
+### Split Data
+
+This paper considers two sample splits.
+
+* (1) Training sample: (1870-1980) Test Sample: (1981-2017) 
+* (2) Training sample: (1870-1990) Test sample: 1991-2017)
+
+## Results for Forecasting Evaluations
+|    Model / Specification    | In-sample (1) | Out-of-sample (1) | In-sample (2) | Out-of-sample (2) |
+| :-------------------------: | :-----------: | :---------------: | :-----------: | :---------------: |
+|        **Sparse-TVP**       |      0.98     |        0.68       |      0.96     |        0.79       |
+|            Logit            |      0.82     |        0.49       |      0.82     |        0.64       |
+|            Lasso            |      0.82     |        0.54       |      0.81     |        0.71       |
+|             RNN             |      0.98     |        0.74       |      0.89     |        0.77       |
+|           RNN-LSTM          |      0.83     |        0.67       |      0.91     |        0.66       |
+|           RNN-GRU           |      0.84     |        0.71       |      0.89     |        0.73       |
+|                             |               |                   |               |                   |
+|      **Sample Period**      |   1870–1980   |     1981–2017     |   1870–1990   |     1991–2017     |
+| **Pre-crisis Observations** |       18      |         44        |       36      |         26        |
+
+## Robustness Check using Country by Country Cross Validation inspired by Tölö (2020)
+
+In this analysis, I assume that the coeﬀicient matrix depends only on time t and not on country j. Therefore, we implicitly assume that all countries present during the same period follow the same data generating process, without considering the heterogeneity of coeﬀicients between countries. We make this assumption because our main objective is to estimate the time-series usefulness of variables viewed globally, rather than to analyze the differences between countries. However, it is important to individually validate whether these assumptions are correct.
+
+Furthermore, even from the perspective of policymakers who formulate global macroprudential regulations, it is important to know whether insights obtained using a specific country group will be valid for other countries with similar properties. Therefore, in this section, we present the results of country-by-country cross-validation, as described by Tölö (2020).
+
+### Idea
+
+The idea is as follows. First, we create a training dataset by excluding a specific country and estimate models. Then, we perform out-of-sample prediction using the excluded countries as the test data. 
+
+## Results
+
+|   OOS                    | Sequential (1) | Sequential (2) | Country-by-Country |
+| :----------------------: | :------------: | :------------: | :----------------: |
+|      **Sparse-TVP**      |      0.68      |      0.79      |        0.81        |
+|           Logit          |      0.49      |      0.64      |        0.79        |
+|           Lasso          |      0.54      |      0.71      |        0.79        |
+|            RNN           |      0.74      |      0.77      |        0.84        |
+|         RNN-LSTM         |      0.67      |      0.66      |        0.84        |
+|          RNN-GRU         |      0.71      |      0.73      |        0.85        |
+|                          |                |                |                    |
+|     **Train Period**     |    1870–1980   |    1870–1990   |          –         |
+|      **Test Period**     |    1981–2017   |    1991–2017   |          –         |
+| **Pre-crisis (Trained)** |       18       |       36       |          –         |
+|  **Pre-crisis (Tested)** |       44       |       26       |          –         |
+|  **Period**              |       -        |       -        |      1870–2017     |
+|  **Pre-crisis**          |       -        |       -        |          62        |
+
+The results in the Table above show that the models in the country by country cross-validation exhibit superior performance compared to most models in sequential evaluation, which indicates the diﬀiculty of sequential out-of-sample prediction. However, the model is too heavy.
+
+Despite the lower AUC statistics of sparse-TVP compared to RNN-based models in country by country cross-validation, it possesses comparative advantage. Unlike neural networks, the sparse-TVP model enables us to comprehend which early warning indicators (EWIs) have a more substantial predictive power and track the variations in their predictive power. Therefore, I concluded that the sparse-TVP model achieves more flexible and accurate learning of past financial crises and demonstrates high predictive power for future financial crisis forecasts simultaneously.
