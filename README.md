@@ -3,7 +3,7 @@
 ## Abstract
 Previous studies have endeavored to identify early warning indicators (EWIs) that are useful in predicting financial crises. This paper aims to categorize a multitude of explanatory variables into three distinct groups: stable EWIs, time-varying EWIs with varying utility over time, and irrelevant variables for financial crisis prediction by utilizing a sparse time-varying parameter (sparse-TVP) model. This paper offers two significant contributions. Firstly, through data-driven analysis, stable EWIs and time-varying EWIs were identified from a wide range of macroeconomic variables. Stable EWIs include the credit-to-GDP ratio and the instability of bank funding structures, which is consistent with the broad literature of EWIs specification. Additionally, global total credit-to-GDP ratio, which has gained prominence since the 1980s, was identified as a time-varying EWI. This finding implies the increasing necessity of considering the influence of global financial cycles to comprehend the underlying mechanisms of financial crises in the past a few decades. Secondly, the proposed sparse-TVP model exhibits superior predictive accuracy compared to alternative techniques assuming fixed parameters, such as logistic regression, LASSO regression, and some RNN-type models. This result suggests that the dynamics of EWIs provide valuable insights not only into past financial crisis mechanisms but also for forecasting future financial crises.
 
-## Features
+## Variables
 
 The model uses macro-financial indicators from the JST dataset.  
 The table below summarizes variable definitions and transformations.
