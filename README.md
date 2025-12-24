@@ -108,7 +108,7 @@ $$
 
 $\tau_0$ and $\xi_0$ are the hyper-parameters which reflect the prior assumptions about the degree of shrinkage of $\tau$ and $\xi$, respectively. Since there is no strong consensus on their calibration, they are commonly set to 1 in empirical applications. Here, the hyper parameters are set to be 0.8 and 1, respectively, following Piironen and Vehtari(2017) The model is estimated with MCMC sampling.
 
-## Results
+## Results for identifying EWIs
 Medians of the estimated posterior distributions are as follows. 
 
 **Time-varying coefficients estimated from the Sparse TVP model**
@@ -124,4 +124,7 @@ Coefficients of all variables are as follows.
 
 **Coefficients of Stable EWIs**
 <img src="Stable_EWI.png">
+
+## Results for Forecasting Evaluations
+(See details in [Forecast in Machine Learnings](Forecasting_ML.ipynb))
 
